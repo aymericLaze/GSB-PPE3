@@ -1,0 +1,4 @@
+services:
+#    a_lgsb.example:
+#        class: ALgsbBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]

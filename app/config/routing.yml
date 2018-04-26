@@ -1,0 +1,7 @@
+a_lgsb:
+    resource: "@ALgsbBundle/Resources/config/routing.yml"
+    prefix:   /
+
+app:
+    resource: '@AppBundle/Controller/'
+    type: annotation

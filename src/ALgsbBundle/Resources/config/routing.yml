@@ -1,0 +1,3 @@
+a_lgsb_homepage:
+    path:     /
+    defaults: { _controller: ALgsbBundle:Default:index }
