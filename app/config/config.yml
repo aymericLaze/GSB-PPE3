@@ -58,6 +58,14 @@ doctrine:
         auto_generate_proxy_classes: '%kernel.debug%'
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
+        mappings:
+            ALgsbBundle:
+                mapping: true
+                type: annotation
+                is_bundle: false
+                dir: %kernel.root_dir%/../src/ALgsbBundle/Entity/
+                prefix: ALgsbBundle\Entity
+                alias: ALgsbBundle
 
 # Swiftmailer Configuration
 swiftmailer:
