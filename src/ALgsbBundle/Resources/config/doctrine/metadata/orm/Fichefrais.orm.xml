@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Fichefrais" table="fichefrais">
+    <indexes>
+      <index name="idEtat" columns="idEtat"/>
+      <index name="idUtilisateur" columns="idUtilisateur"/>
+    </indexes>
+    <id name="mois" type="string" column="mois" length="6"/>
+    <id name="idutilisateur" type="string" column="idUtilisateur" length="4"/>
+    <field name="nbjustificatifs" type="integer" column="nbJustificatifs" nullable="true">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
+    <field name="montantvalide" type="decimal" column="montantValide" precision="10" scale="2" nullable="true"/>
+    <field name="datemodif" type="date" column="dateModif" nullable="true"/>
+    <field name="idetat" type="string" column="idEtat" length="2" nullable="true">
+      <options>
+        <option name="fixed">1</option>
+        <option name="default">CR</option>
+      </options>
+    </field>
+    <many-to-many field="idfraisforfait" target-entity="Fraisforfait" mapped-by="idutilisateur" fetch="LAZY"/>
+  </entity>
+</doctrine-mapping>
