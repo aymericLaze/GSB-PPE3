@@ -1,3 +1,8 @@
-a_lgsb_homepage:
+# Commun
+page_connexion:
     path:     /
     defaults: { _controller: ALgsbBundle:Default:index }
+    
+# Visiteur
+
+# Comptable
