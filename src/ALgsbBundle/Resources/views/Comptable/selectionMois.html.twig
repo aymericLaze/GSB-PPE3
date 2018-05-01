@@ -1,0 +1,19 @@
+{# Vue de selection des mois #}
+
+{% extends '@ALgsb/base.html.twig' %}
+
+{% block title %}
+    Sélection mois - Comptable
+{% endblock %}
+
+{% block header %}
+    {% include '@ALgsb/Comptable/sommaire_comptable.html.twig' %}
+{% endblock %}
+
+{% block content %}
+    <fieldset>
+        <legend>Sélectionner un mois</legend>
+        
+        {{ form(form) }}
+    </fieldset>
+{% endblock %}
