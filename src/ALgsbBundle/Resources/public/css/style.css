@@ -1,6 +1,10 @@
-label, a {
+label {
     display:block;
     width:300px;
+}
+
+a {
+    display:block;
 }
 
 fieldset {
