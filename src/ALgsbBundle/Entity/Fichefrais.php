@@ -52,7 +52,7 @@ class Fichefrais
     /**
      * @var \Etat
      *
-     * @ORM\ManyToOne(targetEntity="Etat")
+     * @ORM\ManyToOne(targetEntity="Etat", inversedBy="fichefrais")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="idetat", referencedColumnName="id")
      * })
