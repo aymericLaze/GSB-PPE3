@@ -1,0 +1,30 @@
+/* 
+    Created on : 1 mai 2018, 14:01:05
+    Author     : laze
+*/
+
+
+/*
+    Style pour les formulaires
+*/
+
+label {
+    display:block;
+    float:left;
+    width:100px;
+}
+
+input {
+    display:block;
+}
+
+#formulaire {
+   display:block;
+   position:absolute;
+   /*top:50%;*/
+   /*left:50%;*/
+   width:50%; /* A toi de donner la bonne largeur */
+   /*height:200px;*/ /* A toi de donner la bonne hauteur */
+   /*margin-left:-150px; /* -largeur/2 */
+   /*margin-top:-100px; /* -hauteur/2 */
+}
