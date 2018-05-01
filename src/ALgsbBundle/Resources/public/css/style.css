@@ -8,10 +8,9 @@
     Style pour les formulaires
 */
 
-label {
+label, a {
     display:block;
-    float:left;
-    width:150px;
+    width:200px;
 }
 
 fieldset {
@@ -28,4 +27,8 @@ table, th, td {
 
 td, th {
         padding: 5px;    
+}
+
+#content {
+    margin-left: 33%;
 }
