@@ -62,7 +62,7 @@ class Fichefrais
     /**
      * @var \Visiteur
      *
-     * @ORM\ManyToOne(targetEntity="Visiteur")
+     * @ORM\ManyToOne(targetEntity="Visiteur", inversedBy="visiteur")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="idvisiteur", referencedColumnName="id")
      * })
