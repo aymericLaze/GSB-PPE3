@@ -327,13 +327,13 @@ class Visiteur
     }
 
     /**
-     * Add lesFichesFrai
+     * Add lesFichesFrais
      *
      * @param \ALgsbBundle\Entity\Fichefrais $lesFichesFrais
      *
      * @return Visiteur
      */
-    public function addLesFichesFrai(\ALgsbBundle\Entity\Fichefrais $lesFichesFrais)
+    public function addLesFichesFrais(\ALgsbBundle\Entity\Fichefrais $lesFichesFrais)
     {
         $this->lesFichesFrais[] = $lesFichesFrais;
 
@@ -345,7 +345,7 @@ class Visiteur
      *
      * @param \ALgsbBundle\Entity\Fichefrais $lesFichesFrais
      */
-    public function removeLesFichesFrai(\ALgsbBundle\Entity\Fichefrais $lesFichesFrais)
+    public function removeLesFichesFrais(\ALgsbBundle\Entity\Fichefrais $lesFichesFrais)
     {
         $this->lesFichesFrais->removeElement($lesFichesFrais);
     }
