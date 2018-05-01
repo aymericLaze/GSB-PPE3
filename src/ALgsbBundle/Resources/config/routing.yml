@@ -3,6 +3,61 @@ page_connexion:
     path:     /
     defaults: { _controller: ALgsbBundle:Default:index }
     
-# Visiteur
+page_deconnexion:
+    path:   /deconnexion
+    defaults: { _controller: ALgsbBundle:Default:deconnexion }
 
-# Comptable
+page_erreur:
+    path:   /erreur/{error}
+    defaults: { _controller: ALgsbBundle:Default:erreur }
+    
+
+# VISITEUR ==========================================
+accueil_visiteur:
+    path:   /visiteur/{id}/accueil
+    defaults: { _controller: ALgsbBundle:Visiteur:accueil }
+    
+selectionnerFiche_visiteur:
+    path:   /visiteur/{id}/selectionner-fiche
+    defaults: { _controller: ALgsbBundle:Visiteur:selectionnerFiche }
+
+consulterFiche_visiteur:
+    path:   /visiteur/{id}/{idFiche}/consulter-fiche
+    defaults: { _controller: ALgsbBundle:Visiteur:consulterFiche }
+    
+saisir_visiteur:
+    path:   /visiteur/{id}/saisir
+    defaults: { _controller: ALgsbBundle:Visiteur:saisir }
+
+# COMPTABLE ==========================================
+accueil_comptable:
+    path:   /comptable/{id}/accueil
+    defaults: { _controller: ALgsbBundle:Comptable:accueil }
+    
+#selectionnerMois_comptable:
+#    path:   /comptable/{id}/selectionner-mois
+#    defaults: { _controller: ALgsbBundle:Comptable:selectionnerMois }
+    
+#selectionnerVisiteur_comptable:
+#    path:   /comptable/{id}/{mois}/selectionner-visiteur
+#    defaults: { _controller: ALgsbBundle:Comptalbe:selectionnerVisiteur }
+    
+#afficherFiche_comptable:
+#    path:   /comptalbe/{id}/{idFiche}/afficher-fiche
+#    defaults: { _controller: ALgsbBundle:Comptable:afficherFiche }
+    
+#modifierFraisForfait_comptable:
+#    path:   /comptable/{id}/{idFiche}/modifier-frais-forfait
+#    defaults: { _controller: ALgsbBundle:Comptable:modifierFraisForfait }
+    
+#reporterFraisHorsForfait_comptable:
+#    path:   /comptable/{id}/{idFiche}/{idFrais}/reporter-frais
+#    defaults: { _controller: ALgsbBundle:Comptable:reporterFraisHorsForfait }
+    
+#refuserFraisHorsForfait_comptable:
+#    path:   /comptable/{id}/{idFiche}/{idFrais}/refuser-frais
+#    defaults: { _controller: ALgsbBundle:Comptable:refuserFraisHorsForfait }
+    
+#validerFiche_comptable:
+#    path:   /comptable/{id}/{idFiche}/valider-fiche
+#    defaults: { _controller: ALgsbBundle:Comptable:validerFiche }
