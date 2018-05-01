@@ -79,7 +79,7 @@ class Fichefrais
     /**
      * @var \Lignefraisforfait
      * 
-     * @ORM\OneToMany(targetEntity="Lignefraisforfait", mappedBy="idfraisforfait")
+     * @ORM\OneToMany(targetEntity="Lignefraisforfait", mappedBy="idfichefrais")
      */
     private $ligneFicheFraisForfait;
     
