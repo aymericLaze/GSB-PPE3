@@ -1,4 +1,4 @@
-{# page d'accueil visiteur #}
+{# page d'accueil comptable #}
 
 {% extends "@ALgsb/base.html.twig" %}
 
@@ -6,6 +6,10 @@
     Accueil - Comptable
 {% endblock %}
 
+{% block header %}
+    {% include('@ALgsb/Comptable/sommaire_comptable.html.twig') %}
+{% endblock %}
+
 {% block content %}
-    <h2>Accueil</h2>
+    <h2>Bienvenue {{prenom ~ ' ' ~ nom}}</h2>
 {% endblock %}
