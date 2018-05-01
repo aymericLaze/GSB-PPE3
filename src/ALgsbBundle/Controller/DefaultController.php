@@ -66,7 +66,7 @@ class DefaultController extends Controller
         return $this->render('@ALgsb/Default/erreur.html.twig', array("libelleErreur"=>$libelleErreur));
     }
     
-    public function deconnexion(Request $request)
+    public function deconnexionAction(Request $request)
     {
         return $this->redirectToRoute('page_connexion');
     }
