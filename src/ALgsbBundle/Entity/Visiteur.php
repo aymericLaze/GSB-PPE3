@@ -84,6 +84,13 @@ class Visiteur
      */
     private $dateembauche;
 
+    
+    /**
+     * @var \Fichefrais
+     * 
+     * @ORM\OneToMany(targetEntity="Fichefrais", mappedBy="idvisiteur")
+     */
+    private $lesFichesFrais;
 
 
     /**
@@ -310,5 +317,46 @@ class Visiteur
     public function getDateembauche()
     {
         return $this->dateembauche;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->lesFichesFrais = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add lesFichesFrai
+     *
+     * @param \ALgsbBundle\Entity\Fichefrais $lesFichesFrais
+     *
+     * @return Visiteur
+     */
+    public function addLesFichesFrai(\ALgsbBundle\Entity\Fichefrais $lesFichesFrais)
+    {
+        $this->lesFichesFrais[] = $lesFichesFrais;
+
+        return $this;
+    }
+
+    /**
+     * Remove lesFichesFrais
+     *
+     * @param \ALgsbBundle\Entity\Fichefrais $lesFichesFrais
+     */
+    public function removeLesFichesFrai(\ALgsbBundle\Entity\Fichefrais $lesFichesFrais)
+    {
+        $this->lesFichesFrais->removeElement($lesFichesFrais);
+    }
+
+    /**
+     * Get lesFichesFrais
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLesFichesFrais()
+    {
+        return $this->lesFichesFrais;
     }
 }
