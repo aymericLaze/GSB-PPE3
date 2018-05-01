@@ -25,7 +25,7 @@ class DefaultController extends Controller
         // recuperation du contenu du formulaire
         $form->handleRequest($request);
         
-        /*// analyse des données et tentative de connexion
+        // analyse des données et tentative de connexion
         if($form->isSubmitted() && $form->isValid())
         {
             $login = $form->get('login')->getData();
@@ -33,17 +33,17 @@ class DefaultController extends Controller
             $profil = $form->get('role')->getData();
             
             // interogation de la base
-            $repository = $this->getDoctrine()->getManager()->getRepository('BatiInterimBundle:'.ucfirst($profil));
-            $donneeUtilisateur = $repository->findOneBy(array('login'=>$login, 'passwd'=>$motDePasse));
-
+            $repository = $this->getDoctrine()->getManager()->getRepository('ALgsbBundle:'.ucfirst($profil));
+            $donneeUtilisateur = $repository->findOneBy(array('login'=>$login, 'mdp'=>$motDePasse));
+            
             if(isset($donneeUtilisateur))
             {
                 // redirection vers la route du role
-                return $this->redirectToRoute('bati_interim_accueil_'.$profil, array('login'=>$login));
+                return $this->redirectToRoute('accueil_'.$profil, array('id'=>$donneeUtilisateur->getId()));
             }
             // affichage message d'erreur
-            return new Response('Login, mot de passe ou rôle incorrect');
-        }*/
+            return $this->redirectToRoute('page_erreur', array('error'=>1));
+        }
         
         return $this->render('@ALgsb/Default/index.html.twig', array('form'=>$form->createView()));
     }
@@ -53,16 +53,21 @@ class DefaultController extends Controller
      */
     public function erreurAction(Request $request)
     {
-        $idErreur = $request->attributes->get($error);
+        $idErreur = $request->attributes->get('error');
         $libelleErreur = NULL;
                 
         switch($idErreur)
         {
-            case 1:
-                $libelleErreur = "Identifiant ou rôle incorrect";
+            case '1':
+                $libelleErreur = "Identifiants ou rôle incorrect";
                 break;
         }
         
         return $this->render('@ALgsb/Default/erreur.html.twig', array("libelleErreur"=>$libelleErreur));
+    }
+    
+    public function deconnexion(Request $request)
+    {
+        return $this->redirectToRoute('page_connexion');
     }
 }
