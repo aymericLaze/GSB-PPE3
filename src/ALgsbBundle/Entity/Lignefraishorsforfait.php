@@ -45,7 +45,7 @@ class Lignefraishorsforfait
     /**
      * @var \Fichefrais
      *
-     * @ORM\ManyToOne(targetEntity="Fichefrais")
+     * @ORM\ManyToOne(targetEntity="Fichefrais", inversedBy="ligneFicheFraisHorsForfait")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="idfichefrais", referencedColumnName="id")
      * })
