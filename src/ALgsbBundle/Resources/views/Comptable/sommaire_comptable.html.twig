@@ -3,7 +3,7 @@
 <fieldset>
     <legend>Comptable</legend>
     <label>{{ prenom ~ ' ' ~ nom }}</label>
-    <a href="">Valider fiche de frais</a>
+    <a href="{{ path('selectionnerMois_comptable', {'id':id}) }}">Valider fiche de frais</a>
     <a href="{{ path('page_deconnexion') }}">Deconnexion</a>
 </fieldset>
 </div>
