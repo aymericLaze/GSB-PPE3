@@ -76,7 +76,14 @@ class Fichefrais
      */
     private $ligneFicheFraisHorsForfait;
 
-
+    /**
+     * @var \Lignefraisforfait
+     * 
+     * @ORM\OneToMany(targetEntity="Lignefraisforfait", mappedBy="idfraisforfait")
+     */
+    private $ligneFicheFraisForfait;
+    
+    
     /**
      * Get id
      *
@@ -270,5 +277,39 @@ class Fichefrais
     public function getLigneFicheFraisHorsForfait()
     {
         return $this->ligneFicheFraisHorsForfait;
+    }
+
+    /**
+     * Add ligneFicheFraisForfait
+     *
+     * @param \ALgsbBundle\Entity\Lignefraisforfait $ligneFicheFraisForfait
+     *
+     * @return Fichefrais
+     */
+    public function addLigneFicheFraisForfait(\ALgsbBundle\Entity\Lignefraisforfait $ligneFicheFraisForfait)
+    {
+        $this->ligneFicheFraisForfait[] = $ligneFicheFraisForfait;
+
+        return $this;
+    }
+
+    /**
+     * Remove ligneFicheFraisForfait
+     *
+     * @param \ALgsbBundle\Entity\Lignefraisforfait $ligneFicheFraisForfait
+     */
+    public function removeLigneFicheFraisForfait(\ALgsbBundle\Entity\Lignefraisforfait $ligneFicheFraisForfait)
+    {
+        $this->ligneFicheFraisForfait->removeElement($ligneFicheFraisForfait);
+    }
+
+    /**
+     * Get ligneFicheFraisForfait
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLigneFicheFraisForfait()
+    {
+        return $this->ligneFicheFraisForfait;
     }
 }
