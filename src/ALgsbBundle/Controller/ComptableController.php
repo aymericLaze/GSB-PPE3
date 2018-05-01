@@ -8,12 +8,18 @@ use Symfony\Component\HttpFoundation\Request;
 
 
 /**
- * Description of ComptableController
+ * Controleur des actions du comptable
  *
  * @author laze
  */
 class ComptableController extends Controller{
     
+    /**
+     * Affichage de la page d'accueil du comptable
+     * 
+     * @param Request $request
+     * @return ComptableController
+     */
     public function accueilAction(Request $request)
     {
         $id = $request->attributes->get('id');
