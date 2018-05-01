@@ -34,8 +34,14 @@ class Fraisforfait
      * @ORM\Column(name="montant", type="decimal", precision=5, scale=2, nullable=true)
      */
     private $montant;
-
-
+    
+    /**
+     * @var \Lignefraisforfait
+     * 
+     * @ORM\OneToMany(targetEntity="Fraisforfait", mappedBy="idfraisforfait")
+     */
+    private $lignefraisforfait;
+            
 
     /**
      * Get id
@@ -93,5 +99,46 @@ class Fraisforfait
     public function getMontant()
     {
         return $this->montant;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->lignefraisforfait = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add lignefraisforfait
+     *
+     * @param \ALgsbBundle\Entity\Fraisforfait $lignefraisforfait
+     *
+     * @return Fraisforfait
+     */
+    public function addLignefraisforfait(\ALgsbBundle\Entity\Fraisforfait $lignefraisforfait)
+    {
+        $this->lignefraisforfait[] = $lignefraisforfait;
+
+        return $this;
+    }
+
+    /**
+     * Remove lignefraisforfait
+     *
+     * @param \ALgsbBundle\Entity\Fraisforfait $lignefraisforfait
+     */
+    public function removeLignefraisforfait(\ALgsbBundle\Entity\Fraisforfait $lignefraisforfait)
+    {
+        $this->lignefraisforfait->removeElement($lignefraisforfait);
+    }
+
+    /**
+     * Get lignefraisforfait
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getLignefraisforfait()
+    {
+        return $this->lignefraisforfait;
     }
 }
