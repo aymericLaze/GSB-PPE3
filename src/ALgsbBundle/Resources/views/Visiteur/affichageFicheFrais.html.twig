@@ -1,0 +1,57 @@
+{# Vue d'affichage d'une fiche de frais #}
+
+{# Page d'accueil visiteur #}
+
+{% extends "@ALgsb/base.html.twig" %}
+
+{% block title %}
+    Accueil - Visiteur
+{% endblock %}
+
+{% block header %}
+    {% include('@ALgsb/Visiteur/sommaire_visiteur.html.twig') %}
+{% endblock %}
+
+{% block content %}
+    <h2>Fiche de frais</h2>
+    
+    <h3>Etat : {{ lesDonnees['libelleEtat'] }} depuis le {{ lesDonnees['dateModif'] | date('d/m/Y') }}</h3>
+    <label>Montant validé : {{ lesDonnees['montantValide'] }}</label>
+    
+    <h3>Éléments forfaitisés</h3>
+    <table>
+        <tr>
+            <th>Forfait Étapes</th>
+            <th>Frais Kilométrique</th>
+            <th>Nuité Hôtel</th>
+            <th>Repas Restaurant</th>
+        </tr>
+        
+        <tr>
+            <td>{{lesDonnees['quantititeFraisForfait']['ETP']}}</td>
+            <td>{{lesDonnees['quantititeFraisForfait']['KM']}}</td>
+            <td>{{lesDonnees['quantititeFraisForfait']['NUI']}}</td>
+            <td>{{lesDonnees['quantititeFraisForfait']['REP']}}</td>
+        </tr>
+    </table>
+    <br />
+        
+    <h3>Descriptif des éléments hors forfait - {{ lesDonnees['nbJustificatifs'] }} justificatif(s) reçus</h3>
+    <table>
+        <tr>
+            <th>Date</th>
+            <th>Libellé</th>
+            <th>Montant</th>
+        </tr>
+
+        {% for lesFrais in lesDonnees['lesFraisHorsForfait'] %}
+            
+            <tr>
+                <td>{{ lesFrais['date'] | date('d/m/Y') }}</td>
+                <td>{{ lesFrais['libelle'] }}</td>
+                <td>{{ lesFrais['montant'] }}</td>
+            </tr>
+
+        {% endfor %}
+    </table>
+{% endblock %}
