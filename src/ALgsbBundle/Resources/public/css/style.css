@@ -11,20 +11,21 @@
 label {
     display:block;
     float:left;
-    width:100px;
+    width:150px;
 }
 
-input {
-    display:block;
-}
-
-#formulaire {
+fieldset {
    display:block;
    position:absolute;
-   /*top:50%;*/
-   /*left:50%;*/
-   width:50%; /* A toi de donner la bonne largeur */
-   /*height:200px;*/ /* A toi de donner la bonne hauteur */
-   /*margin-left:-150px; /* -largeur/2 */
-   /*margin-top:-100px; /* -hauteur/2 */
+   text-align:center;
+}
+
+table, th, td {
+    width: 100%;
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+td, th {
+        padding: 5px;    
 }
