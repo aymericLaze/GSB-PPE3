@@ -1,1 +1,15 @@
 {# Page d'accueil visiteur #}
+
+{% extends "@ALgsb/base.html.twig" %}
+
+{% block title %}
+    Accueil - Visiteur
+{% endblock %}
+
+{% block header %}
+    {% include('@ALgsb/Visiteur/sommaire_visiteur.html.twig') %}
+{% endblock %}
+
+{% block content %}
+    <h2>Bienvenue {{ prenom ~ ' ' ~ nom }}</h2>
+{% endblock %}
