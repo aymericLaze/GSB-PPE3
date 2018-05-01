@@ -1,13 +1,3 @@
-/* 
-    Created on : 1 mai 2018, 14:01:05
-    Author     : laze
-*/
-
-
-/*
-    Style pour les formulaires
-*/
-
 label, a {
     display:block;
     width:300px;
@@ -15,7 +5,7 @@ label, a {
 
 fieldset {
    display:block;
-   position:absolute;
+   width: 25%;
    text-align:center;
 }
 
@@ -32,4 +22,11 @@ td, th {
 
 #content {
     margin-left: 35%;
+}
+
+#sommaire {
+   display:block;
+   width: 25%;
+   position:absolute;
+   text-align:center;
 }
