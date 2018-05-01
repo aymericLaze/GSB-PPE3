@@ -1,0 +1,52 @@
+{# Page d'accueil visiteur #}
+
+{% extends "@ALgsb/base.html.twig" %}
+
+{% block title %}
+    Saisir une fiche - Visiteur
+{% endblock %}
+
+{% block header %}
+    {% include('@ALgsb/Visiteur/sommaire_visiteur.html.twig') %}
+{% endblock %}
+
+{% block content %}
+    <h2>Renseignement de ma fiche de frais du mois {{ dateDuJour | date('m/Y') }}</h2>
+    
+    <fieldset>
+        <legend>Éléments forfaitisés</legend>
+        {{ form(formFraisForfait) }}
+    </fieldset>
+    <br />
+    <br />
+    <br />
+    
+    
+    <h3>Descriptif des éléments hors forfait</h3>
+    
+    {% if tabFraisHorsForfait | length != 0 %}
+    <table>
+        <tr>
+            <td>Date</td>
+            <td>Libellé</td>
+            <td>Montant</td>
+        </tr>
+        
+        {% for fraisHorsForfait in tabFraisHorsForfait %}
+        <tr>
+            <td>{{fraisHorsForfait.getDate | date('d/m/Y') }}</td>
+            <td>{{fraisHorsForfait.getLibelle}}</td>
+            <td>{{fraisHorsForfait.getMontant}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br />
+    <br />
+    <br />
+    {% endif %}
+    
+    <fieldset>
+        <legend>Nouvel éléments hors forfait</legend>
+        {{ form(formFraisHorsForfait) }}
+    </fieldset>
+{% endblock %}
