@@ -1,0 +1,19 @@
+{# Vue de la selection de visiteur #}
+
+{% extends '@ALgsb/base.html.twig' %}
+
+{% block title %}
+    Sélection visiteur - Compatble
+{% endblock %}
+
+{% block header %}
+    {% include('@ALgsb/Comptable/sommaire_comptable.html.twig') %}
+{% endblock %}
+
+{% block content %}
+    <fieldset>
+        <legend>Sélectionner un mois</legend>
+        
+        {{ form(form) }}
+    </fieldset>
+{% endblock %}
