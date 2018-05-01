@@ -1,0 +1,24 @@
+{# Vue de modification de frais forfait #}
+
+{% extends "@ALgsb/base.html.twig" %}
+
+{% block title %}
+    Saisir une fiche - Visiteur
+{% endblock %}
+
+{% block header %}
+    {% include('@ALgsb/Visiteur/sommaire_visiteur.html.twig') %}
+{% endblock %}
+
+{% block content %}
+    <h2>Modifier la fiche de frias</h2>
+    
+    <fieldset>
+        <legend>Éléments forfaitisés</legend>
+        {{ form(form) }}
+    </fieldset>
+    <br />
+    <br />
+    <br />
+    
+{% endblock %}
