@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block header %}
-    {% include('@ALgsb/Visiteur/sommaire_visiteur.html.twig') %}
+    {% include('@ALgsb/Comptable/sommaire_comptable.html.twig') %}
 {% endblock %}
 
 {% block content %}
@@ -33,7 +33,7 @@
         </tr>
     </table>
     <br />
-    <button><a>Modifier<a></button>
+    <a href="{{ path('modifierFraisForfait_comptable', {'id':id, 'idFiche':idFiche} ) }}"><button>Modifier</button></a>
         
     <h3>Descriptif des éléments hors forfait - {{ lesDonnees['nbJustificatifs'] }} justificatif(s) reçus</h3>
     <table>
@@ -51,12 +51,12 @@
                 <td>{{ lesFrais['date'] | date('d/m/Y') }}</td>
                 <td>{{ lesFrais['libelle'] }}</td>
                 <td>{{ lesFrais['montant'] }}</td>
-                <td><a><button>Reporter</button></a></td>
+                <td><a href="{{ path('reporterFraisHorsForfait_comptable', {'id':id, 'idFiche':idFiche, 'idFrais':lesFrais.id}) }}"><button>Reporter</button></a></td>
                 <td><a href="{{ path('refuserFraisHorsForfait_comptable', {'id':id, 'idFiche':idFiche, 'idFrais':lesFrais.id}) }}"><button>Refuser</button></a></td>
             </tr>
 
         {% endfor %}
     </table>
     <br />
-    <button><a>Valider</a></button>
+    <a href="{{ path('validerFiche_comptable' , {'id':id, 'idFiche':idFiche}) }}"><button>Valider</button></a>
 {% endblock %}
