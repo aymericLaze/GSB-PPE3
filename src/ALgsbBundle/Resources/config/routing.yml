@@ -34,30 +34,30 @@ accueil_comptable:
     path:   /comptable/{id}/accueil
     defaults: { _controller: ALgsbBundle:Comptable:accueil }
     
-#selectionnerMois_comptable:
-#    path:   /comptable/{id}/selectionner-mois
-#    defaults: { _controller: ALgsbBundle:Comptable:selectionnerMois }
+selectionnerMois_comptable:
+    path:   /comptable/{id}/selectionner-mois
+    defaults: { _controller: ALgsbBundle:Comptable:selectionnerMois }
     
-#selectionnerVisiteur_comptable:
-#    path:   /comptable/{id}/{mois}/selectionner-visiteur
-#    defaults: { _controller: ALgsbBundle:Comptalbe:selectionnerVisiteur }
+selectionnerVisiteur_comptable:
+    path:   /comptable/{id}/{mois}/selectionner-visiteur
+    defaults: { _controller: ALgsbBundle:Comptable:selectionnerVisiteur }
     
-#afficherFiche_comptable:
-#    path:   /comptalbe/{id}/{idFiche}/afficher-fiche
-#    defaults: { _controller: ALgsbBundle:Comptable:afficherFiche }
+afficherFiche_comptable:
+    path:   /comptalbe/{id}/{idFiche}/afficher-fiche
+    defaults: { _controller: ALgsbBundle:Comptable:afficherFiche }
     
-#modifierFraisForfait_comptable:
-#    path:   /comptable/{id}/{idFiche}/modifier-frais-forfait
-#    defaults: { _controller: ALgsbBundle:Comptable:modifierFraisForfait }
+modifierFraisForfait_comptable:
+    path:   /comptable/{id}/{idFiche}/modifier-frais-forfait
+    defaults: { _controller: ALgsbBundle:Comptable:modifierFraisForfait }
     
-#reporterFraisHorsForfait_comptable:
-#    path:   /comptable/{id}/{idFiche}/{idFrais}/reporter-frais
-#    defaults: { _controller: ALgsbBundle:Comptable:reporterFraisHorsForfait }
+reporterFraisHorsForfait_comptable:
+    path:   /comptable/{id}/{idFiche}/{idFrais}/reporter-frais
+    defaults: { _controller: ALgsbBundle:Comptable:reporterFraisHorsForfait }
     
-#refuserFraisHorsForfait_comptable:
-#    path:   /comptable/{id}/{idFiche}/{idFrais}/refuser-frais
-#    defaults: { _controller: ALgsbBundle:Comptable:refuserFraisHorsForfait }
+refuserFraisHorsForfait_comptable:
+    path:   /comptable/{id}/{idFiche}/{idFrais}/refuser-frais
+    defaults: { _controller: ALgsbBundle:Comptable:refuserFraisHorsForfait }
     
-#validerFiche_comptable:
-#    path:   /comptable/{id}/{idFiche}/valider-fiche
-#    defaults: { _controller: ALgsbBundle:Comptable:validerFiche }
+validerFiche_comptable:
+    path:   /comptable/{id}/{idFiche}/valider-fiche
+    defaults: { _controller: ALgsbBundle:Comptable:validerFiche }
