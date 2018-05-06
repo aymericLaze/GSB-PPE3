@@ -11,6 +11,8 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use ALgsbBundle\Form\LignefraishorsforfaitType;
 use ALgsbBundle\Entity\Lignefraishorsforfait;
 
+use ALgsbBundle\Model\ModelVisiteur;
+
 use DateTime;
 
 /**
@@ -30,7 +32,7 @@ class VisiteurController extends Controller {
     {
         $id = $request->attributes->get('id');
         
-        $leVisiteur = $this->getVisiteur($id);
+        $leVisiteur = $this->getRepository($id);
         
         $nom = $leVisiteur->getNom();
         $prenom = $leVisiteur->getPrenom();
@@ -54,7 +56,7 @@ class VisiteurController extends Controller {
         $nom = $leVisiteur->getNom();
         $prenom = $leVisiteur->getPrenom();
         
-        $lesMois = $this->getLesMoisPourFormulaire($leVisiteur);
+        $lesMois = ModelVisiteur::getLesMoisPourFormulaire($leVisiteur->getLesFichesFrais()->toArray());
         
         $form = $this->createFormBuilder()
                     ->add('mois', ChoiceType::class, array('label'=>'Mois : ', 'choices'=>$lesMois))
@@ -116,8 +118,9 @@ class VisiteurController extends Controller {
         $prenom = $leVisiteur->getPrenom();
         $dateDuJour = new DateTime();
         
+        $em = $this->getDoctrine()->getManager();
         
-        if(!$this->isFicheDuMois($this->array_get_last($leVisiteur->getLesFichesFrais()->toArray())))
+        if(!ModelVisiteur::isFicheDuMois($this->array_get_last($leVisiteur->getLesFichesFrais()->toArray())))
         {
             $this->creationNouvelleFicheFrais($leVisiteur);
         }
@@ -146,7 +149,11 @@ class VisiteurController extends Controller {
         
         if($formFraisHorsForfait->isSubmitted() && $formFraisHorsForfait->isValid())
         {
-            $this->enregistrerFraisHorsForfait($formFraisHorsForfait, $laFiche);
+            $leFrais = ModelVisiteur::enregistrerFraisHorsForfait($formFraisHorsForfait, $laFiche);
+            
+            $em->persist($leFrais);
+            $em->flush();
+            
             return $this->redirectToRoute('saisir_visiteur', array('id'=>$id));
         }
         
@@ -179,26 +186,6 @@ class VisiteurController extends Controller {
                 ->find($id);
     }
     
-    /**
-     * Retourne un tableau pour créer le formulaire de sélection de mois
-     * 
-     * @param Visiteur $leVisiteur
-     * @return array
-     */
-    private function getLesMoisPourFormulaire($leVisiteur)
-    {
-        $lesMois = array();
-        $lesFiches = $leVisiteur->getLesFichesFrais()->toArray();
-        
-        foreach($lesFiches as $uneFiche)
-        {
-            $mois = $uneFiche->getMois();
-            $moisKey = $mois[4].$mois[5].'-'.$mois[0].$mois[1].$mois[2].$mois[3];
-            $lesMois[$moisKey] = $uneFiche->getId();
-        }
-        
-        return $lesMois;
-    }
     
     /**
      * Retourne la quantite de chaque frais forfait
@@ -251,17 +238,6 @@ class VisiteurController extends Controller {
     {
         $res = count($tab) - 1;
     return $tab[$res];
-    }
-    
-    /**
-     * Verification que la fiche du mois existe
-     * 
-     * @param Fichefrais $laFiche
-     * @return boolean
-     */
-    private function isFicheDuMois($laFiche)
-    {
-        return $laFiche->getIdetat()->getId() == 'CR';
     }
     
     /**
@@ -324,26 +300,6 @@ class VisiteurController extends Controller {
             $i++;
         }
         
-        $em->flush();
-    }
-    
-    /**
-     * Enregistre les frais hors forfait du visiteur
-     * 
-     * @param type $form
-     * @param type $laFiche
-     */
-    private function enregistrerFraisHorsForfait($form, $laFiche)
-    {
-        $frais = new Lignefraishorsforfait();
-        
-        $frais->setDate($form->get('date')->getData());
-        $frais->setLibelle($form->get('libelle')->getData());
-        $frais->setMontant($form->get('montant')->getData());
-        $frais->setIdfichefrais($laFiche);
-       
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($frais);
         $em->flush();
     }
 }
