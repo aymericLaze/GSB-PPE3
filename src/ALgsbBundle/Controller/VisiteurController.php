@@ -168,7 +168,7 @@ class VisiteurController extends Controller {
      * Retourne les informations sur le visiteur en fonction de l'identifiant
      * 
      * @param str $id
-     * @return Visiteur
+     * @return Object
      */
     private function getRepository($id, $classe = 'Visiteur')
     {
@@ -226,7 +226,7 @@ class VisiteurController extends Controller {
      */
     private function getLigneFraisHorsForfait($laFiche)
     {
-        $tableau = array();
+        $tableau = [];
         
         foreach($laFiche->getLigneFicheFraisHorsForfait()->toArray() as $laLigne)
         {
