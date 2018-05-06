@@ -11,6 +11,8 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 use DateTime;
 
+use ALgsbBundle\Model\ModelComptable;
+
 /**
  * Controleur des actions du comptable
  *
@@ -54,7 +56,8 @@ class ComptableController extends Controller{
         $lesMois = $this->getDoctrine()->getManager()->getRepository('ALgsbBundle:Fichefrais')->findBy(array('idetat'=>'CL'));
         
         $form = $this->createFormBuilder()
-                ->add('leMois', ChoiceType::class, array('label'=>'Mois : ', 'choices'=>$this->getLesMoisValide($lesMois)))
+                ->add('leMois', ChoiceType::class, array('label'=>'Mois : ', 'choices'=> ModelComptable::getLesMoisValide($lesMois)))
+                /*->add('leMois', ChoiceType::class, array('label'=>'Mois : ', 'choices'=>$this->getLesMoisValide($lesMois)))*/
                 ->add('submit', SubmitType::class, array('label'=>'Valider'))
                 ->getForm();
         
@@ -87,7 +90,8 @@ class ComptableController extends Controller{
         $lesVisiteurs = $ficheRepo->findBy(array('idetat'=>'CL', 'mois'=>$mois));
         
         $form = $this->createFormBuilder()
-                ->add('leVisiteur', ChoiceType::class, array('label'=>'Visiteur : ', 'choices'=>$this->getLesVisiteursValide($lesVisiteurs)))
+                ->add('leVisiteur', ChoiceType::class, array('label'=>'Visiteur : ', 'choices'=> ModelComptable::getLesVisiteursValide($lesVisiteurs))) 
+                /*->add('leVisiteur', ChoiceType::class, array('label'=>'Visiteur : ', 'choices'=>$this->getLesVisiteursValide($lesVisiteurs)))*/
                 ->add('submit', SubmitType::class, array('label'=>'Valider'))
                 ->getForm();
         
@@ -209,7 +213,7 @@ class ComptableController extends Controller{
         
         $laDerniereFiche = $this->array_get_last($leVisiteur->getLesFichesFrais()->toArray());
         
-        if($laDerniereFiche->getId() == $laFiche->getId() || $laDerniereFiche->getIdetat()->getId() == 'CL')
+        if($laDerniereFiche->getId() == $laFiche->getId() && $laDerniereFiche->getIdetat()->getId() == 'CL')
         {
             $this->creationNouvelleFicheFrais($leVisiteur);
         }
@@ -261,44 +265,6 @@ class ComptableController extends Controller{
                 ->getManager()
                 ->getRepository('ALgsbBundle:Comptable')
                 ->find($id);
-    }
-    
-    /**
-     * Retourne un tableau associatif de mois valide pour la selection
-     * 
-     * @param array $lesMois
-     * @return array
-     */
-    private function getLesMoisValide($lesMois)
-    {
-        $lesMoisValide = array();
-        
-        foreach($lesMois as $mois)
-        {
-            $lesMoisValide[$mois->getDateModif()->format('m-Y')] = $mois->getMois(); 
-        }
-        
-        return $lesMoisValide;
-    }
-    
-    /**
-     * Retourne la liste des visiteur ayant une fiche de frais a valider
-     * 
-     * @param array $lesVisiteurs
-     * @return array
-     */
-    private function getLesVisiteursValide($lesVisiteurs)
-    {
-        $lesVisiteursValide = array();
-        
-        foreach($lesVisiteurs as $visiteur)
-        {
-            $key = $visiteur->getIdVisiteur()->getNom().' '.$visiteur->getIdVisiteur()->getPrenom();
-            $value = $visiteur->getIdVisiteur()->getId();
-            $lesVisiteursValide[$key] = $value; 
-        }
-        
-        return $lesVisiteursValide;
     }
     
     /**
