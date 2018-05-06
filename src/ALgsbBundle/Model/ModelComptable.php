@@ -3,7 +3,7 @@
 namespace ALgsbBundle\Model;
 
 /**
- * Description of ModelCOmptable
+ * Methodes specifiques au Comptable
  *
  * @author laze
  */
