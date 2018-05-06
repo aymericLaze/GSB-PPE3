@@ -19,6 +19,7 @@ class ModelComptable {
     {
         $lesMoisValide = [];
         
+        // parcours de la liste et creation du dictionnaire
         foreach($lesMois as $mois)
         {
             $lesMoisValide[$mois->getDateModif()->format('m-Y')] = $mois->getMois(); 
@@ -37,6 +38,7 @@ class ModelComptable {
     {
         $lesVisiteursValide = [];
         
+        // parcours de la liste et creation du dictionnaire
         foreach($lesVisiteurs as $visiteur)
         {
             $key = $visiteur->getIdVisiteur()->getNom().' '.$visiteur->getIdVisiteur()->getPrenom();
