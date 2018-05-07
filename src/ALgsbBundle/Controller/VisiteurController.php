@@ -31,9 +31,10 @@ class VisiteurController extends Controller {
      */
     public function accueilAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
         $id = $request->attributes->get('id');
         
-        $leVisiteur = $this->getRepository($id);
+        $leVisiteur = ModelBase::getLeRepository($em, $id, 'Visiteur');
         
         $nom = $leVisiteur->getNom();
         $prenom = $leVisiteur->getPrenom();
@@ -50,9 +51,10 @@ class VisiteurController extends Controller {
      */
     public function selectionnerFicheAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
         $id = $request->attributes->get('id');
         
-        $leVisiteur = $this->getRepository($id);
+        $leVisiteur = ModelBase::getLeRepository($em, $id, 'Visiteur');
         
         $nom = $leVisiteur->getNom();
         $prenom = $leVisiteur->getPrenom();
@@ -82,11 +84,12 @@ class VisiteurController extends Controller {
      */
     public function consulterFicheAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
         $id = $request->attributes->get('id');
         $idFiche = $request->attributes->get('idFiche');
         
-        $leVisiteur = $this->getRepository($id);
-        $laFiche = $this->getRepository($idFiche, 'Fichefrais');
+        $leVisiteur = ModelBase::getLeRepository($em, $id, 'Visiteur');
+        $laFiche = ModelBase::getLeRepository($em, $idFiche, 'Fichefrais');
         
         $nom = $leVisiteur->getNom();
         $prenom = $leVisiteur->getPrenom();
@@ -111,22 +114,23 @@ class VisiteurController extends Controller {
      */
     public function saisirAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
         $id = $request->attributes->get('id');
         
-        $leVisiteur = $this->getRepository($id);
+        $leVisiteur = ModelBase::getLeRepository($em, $id, 'Visiteur');
         
         $nom = $leVisiteur->getNom();
         $prenom = $leVisiteur->getPrenom();
         $dateDuJour = new DateTime();
         
-        $em = $this->getDoctrine()->getManager();
-        
-        if(!ModelVisiteur::isFicheDuMois($this->array_get_last($leVisiteur->getLesFichesFrais()->toArray())))
+        $lesFiches = $leVisiteur->getLesFichesFrais()->toArray();
+        if(!ModelVisiteur::isFicheDuMois(end($lesFiches)))
         {
             ModelBase::creationNouvelleFicheFrais($leVisiteur, $em);
+            $lesFiches = $leVisiteur->getLesFichesFrais()->toArray();
         }
         
-        $laFiche = $this->array_get_last($leVisiteur->getLesFichesFrais()->toArray());
+        $laFiche = end($lesFiches);
         $lesLignesFraisForfait = $laFiche->getLigneFicheFraisForfait()->toArray();
         
         $formFraisForfait = $this->createFormBuilder()
@@ -144,7 +148,7 @@ class VisiteurController extends Controller {
         
         if($formFraisForfait->isSubmitted() && $formFraisForfait->isValid())
         {
-            $this->enregistrerFraisForfait($formFraisForfait, $lesLignesFraisForfait);
+            ModelBase::enregistrerFraisForfait($formFraisForfait, $lesLignesFraisForfait, $em);
             return $this->redirectToRoute('saisir_visiteur', array('id'=>$id));
         }
         
@@ -169,60 +173,5 @@ class VisiteurController extends Controller {
                     );
         
         return $this->render('@ALgsb/Visiteur/saisirFiche.html.twig', $parametres);
-    }
-    
-    
-    /**
-     * Retourne les informations sur le visiteur en fonction de l'identifiant
-     * 
-     * @param str $id
-     * @return Object
-     */
-    private function getRepository($id, $classe = 'Visiteur')
-    {
-        return $this
-                ->getDoctrine()
-                ->getManager()
-                ->getRepository('ALgsbBundle:'.$classe)
-                ->find($id);
-    }
-    
-    /**
-     * Retourne le dernier element d'un tableau
-     * 
-     * @param array $tab
-     * @return array
-     */
-    private function array_get_last(array $tab)
-    {
-        $res = count($tab) - 1;
-    return $tab[$res];
-    }
-    
-    /**
-     * Enregistre les frais forfait du visiteur
-     * 
-     * @param FormBuilder $form
-     * @param array $lesLignesFrais
-     */
-    private function enregistrerFraisForfait($form, $lesLignesFrais)
-    {
-        $i = 0;
-        $em = $this->getDoctrine()->getManager();
-        $lesvaleurs = array(
-                        $form->get('ETP')->getData(),
-                        $form->get('KM')->getData(),
-                        $form->get('NUI')->getData(),
-                        $form->get('REP')->getData(),
-                    );
-        
-        foreach($lesvaleurs as $laValeur)
-        {
-            $lesLignesFrais[$i]->setQuantite($laValeur);
-            $em->persist($lesLignesFrais[$i]);
-            $i++;
-        }
-        
-        $em->flush();
     }
 }
