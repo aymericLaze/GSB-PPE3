@@ -29,9 +29,10 @@ class ComptableController extends Controller{
      */
     public function accueilAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
         $id = $request->attributes->get('id');
         
-        $leComptable = $this->getComptable($id);
+        $leComptable = ModelBase::getLeRepository($em, $id, 'Comptable');
         
         $nom = $leComptable->getNom();
         $prenom = $leComptable->getPrenom();
@@ -47,9 +48,10 @@ class ComptableController extends Controller{
      */
     public function selectionnerMoisAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
         $id = $request->attributes->get('id');
         
-        $leComptable = $this->getComptable($id);
+        $leComptable = ModelBase::getLeRepository($em, $id, 'Comptable');
         
         $nom = $leComptable->getNom();
         $prenom = $leComptable->getPrenom();
@@ -58,7 +60,6 @@ class ComptableController extends Controller{
         
         $form = $this->createFormBuilder()
                 ->add('leMois', ChoiceType::class, array('label'=>'Mois : ', 'choices'=> ModelComptable::getLesMoisValide($lesMois)))
-                /*->add('leMois', ChoiceType::class, array('label'=>'Mois : ', 'choices'=>$this->getLesMoisValide($lesMois)))*/
                 ->add('submit', SubmitType::class, array('label'=>'Valider'))
                 ->getForm();
         
@@ -79,10 +80,11 @@ class ComptableController extends Controller{
      */
     public function selectionnerVisiteurAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
         $id = $request->attributes->get('id');
         $mois = $request->attributes->get('mois');
         
-        $leComptable = $this->getComptable($id);
+        $leComptable = ModelBase::getLeRepository($em, $id, 'Comptable');
         
         $nom = $leComptable->getNom();
         $prenom = $leComptable->getPrenom();
@@ -92,7 +94,6 @@ class ComptableController extends Controller{
         
         $form = $this->createFormBuilder()
                 ->add('leVisiteur', ChoiceType::class, array('label'=>'Visiteur : ', 'choices'=> ModelComptable::getLesVisiteursValide($lesVisiteurs))) 
-                /*->add('leVisiteur', ChoiceType::class, array('label'=>'Visiteur : ', 'choices'=>$this->getLesVisiteursValide($lesVisiteurs)))*/
                 ->add('submit', SubmitType::class, array('label'=>'Valider'))
                 ->getForm();
         
@@ -114,15 +115,16 @@ class ComptableController extends Controller{
      */
     public function afficherFicheAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
         $id = $request->attributes->get('id');
         $idFiche = $request->attributes->get('idFiche');
         
-        $leComptable = $this->getComptable($id);
+        $leComptable = ModelBase::getLeRepository($em, $id, 'Comptable');
         
         $nom = $leComptable->getNom();
         $prenom = $leComptable->getPrenom();
         
-        $laFiche = $this->getDoctrine()->getManager()->getRepository('ALgsbBundle:Fichefrais')->find($idFiche);
+        $laFiche = ModelBase::getLeRepository($em, $idFiche, 'Fichefrais');
         
         $lesDonnees['libelleEtat'] = $laFiche->getIdetat()->getLibelle();
         $lesDonnees['dateModif'] = $laFiche->getDatemodif();
@@ -142,12 +144,12 @@ class ComptableController extends Controller{
      */
     public function refuserFraisHorsForfaitAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
         $id = $request->attributes->get('id');
         $idFiche = $request->attributes->get('idFiche');
         $idFrais = $request->attributes->get('idFrais');
         
-        $em = $this->getDoctrine()->getManager();
-        $leFraisHorsForfait = $em->getRepository('ALgsbBundle:Lignefraishorsforfait')->find($idFrais);
+        $leFraisHorsForfait = ModelBase::getLeRepository($em, $idFrais, 'Lignefraishorsforfait');
         $leFraisHorsForfait->setLibelle('[REFUSE]'.$leFraisHorsForfait->getLibelle());
         
         $em->persist($leFraisHorsForfait);
@@ -164,15 +166,15 @@ class ComptableController extends Controller{
      */
     public function modifierFraisForfaitAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
         $id = $request->attributes->get('id');
         $idFiche = $request->attributes->get('idFiche');
         
-        $leComptable = $this->getComptable($id);
-        
+        $leComptable = ModelBase::getLeRepository($em, $id, 'Comptable');
+        $laFiche = ModelBase::getLeRepository($em, $idFiche, 'Fichefrais');
+
         $nom = $leComptable->getNom();
         $prenom = $leComptable->getPrenom();
-        
-        $laFiche = $this->getDoctrine()->getManager()->getRepository('ALgsbBundle:Fichefrais')->find($idFiche);
         
         $lesQuantites = ModelBase::getQuantiteFraisForfait($laFiche);
         
@@ -187,7 +189,7 @@ class ComptableController extends Controller{
         $form->handleRequest($request);
         if($form->isSubmitted() && $form->isValid())
         {
-            $this->enregistrerFraisForfait($form, $laFiche->getLigneFicheFraisForfait());
+            ModelBase::enregistrerFraisForfait($form, $laFiche->getLigneFicheFraisForfait()->toArray(), $em);
             return $this->redirectToRoute('afficherFiche_comptable', array('id'=>$id, 'idFiche'=>$idFiche));
         }
         
@@ -202,24 +204,22 @@ class ComptableController extends Controller{
      */
     public function reporterFraisHorsForfaitAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
         $id = $request->attributes->get('id');
         $idFiche = $request->attributes->get('idFiche');
         $idFrais = $request->attributes->get('idFrais');
         
-        $em = $this->getDoctrine()->getManager();
-        $leFraisHorsForfait = $em->getRepository('ALgsbBundle:Lignefraishorsforfait')->find($idFrais);
-        
-        $laFiche = $em->getRepository('ALgsbBundle:FicheFrais')->find($idFiche);
+        $leFraisHorsForfait = ModelBase::getLeRepository($em, $idFrais, 'Lignefraishorsforfait');
+        $laFiche = ModelBase::getLeRepository($em, $idFiche, 'Fichefrais');
         $leVisiteur = $laFiche->getIdVisiteur();
         
-        $laDerniereFiche = $this->array_get_last($leVisiteur->getLesFichesFrais()->toArray());
-        
+        $lesFiches = $leVisiteur->getLesFichesFrais()->toArray();
+        $laDerniereFiche = end($lesFiches);
         if($laDerniereFiche->getId() == $laFiche->getId() && $laDerniereFiche->getIdetat()->getId() == 'CL')
         {
             ModelBase::creationNouvelleFicheFrais($leVisiteur, $em);
+            $laDerniereFiche = end($lesFiches);
         }
-        
-        $laDerniereFiche = $this->array_get_last($leVisiteur->getLesFichesFrais()->toArray());
         
         $leFraisHorsForfait->setIdfichefrais($laDerniereFiche);
         
@@ -237,55 +237,18 @@ class ComptableController extends Controller{
      */
     public function validerFicheAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
         $id = $request->attributes->get('id');
         $idFiche = $request->attributes->get('idFiche');
         
-        $em = $this->getDoctrine()->getManager();
-        
-        $laFiche = $em->getRepository('ALgsbBundle:Fichefrais')->find($idFiche);
-        $unEtat = $em->getRepository('ALgsbBundle:Etat')->find('VA');
+        $laFiche = ModelBase::getLeRepository($em, $idFiche, 'Fichefrais');
+        $unEtat = ModelBase::getLeRepository($em, 'VA', 'Etat');
         
         $laFiche->setIdetat($unEtat);
         $em->persist($laFiche);
         $em->flush();
         
         return $this->redirectToRoute('accueil_comptable', array('id'=>$id));
-    }
-    
-    
-    /**
-     * Retourne les informations sur le comptable en fonction de l'identifiant
-     * 
-     * @param str $id
-     * @return Comptable
-     */
-    private function getComptable($id)
-    {
-        return $this
-                ->getDoctrine()
-                ->getManager()
-                ->getRepository('ALgsbBundle:Comptable')
-                ->find($id);
-    }
-    
-    /**
-     * Enregistre les frais forfait du visiteur
-     * 
-     * @param FormBuilder $form
-     * @param array $lesLignesFrais
-     */
-    private function enregistrerFraisForfait($form, $lesLignesFrais)
-    {
-        $em = $this->getDoctrine()->getManager();
-        
-        foreach($lesLignesFrais as $laLigne)
-        {
-            $idEtat = $laLigne->getIdfraisforfait()->getId();
-            $laLigne->setQuantite($form->get($idEtat)->getData());
-            $em->persist($laLigne);
-        }
-        
-        $em->flush();
     }
     
     /**
