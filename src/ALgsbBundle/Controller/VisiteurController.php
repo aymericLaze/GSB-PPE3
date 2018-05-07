@@ -131,13 +131,13 @@ class VisiteurController extends Controller {
         }
         
         $laFiche = end($lesFiches);
-        $lesLignesFraisForfait = $laFiche->getLigneFicheFraisForfait()->toArray();
+        $lesQuantites = ModelBase::getQuantiteFraisForfait($laFiche);
         
         $formFraisForfait = $this->createFormBuilder()
-                ->add('ETP',    TextType::class, array('label'=>'Forfait étape : ', 'data'=>$lesLignesFraisForfait[0]->getQuantite()))
-                ->add('KM',     TextType::class, array('label'=>'Frais Kilométrique : ', 'data'=>$lesLignesFraisForfait[1]->getQuantite()))
-                ->add('NUI',    TextType::class, array('label'=>'Nuitée Hôtel : ', 'data'=>$lesLignesFraisForfait[2]->getQuantite()))
-                ->add('REP',    TextType::class, array('label'=>'Repas Restaurant : ', 'data'=>$lesLignesFraisForfait[3]->getQuantite()))
+                ->add('ETP',    TextType::class, array('label'=>'Forfait étape : ', 'data'=>$lesQuantites['ETP']))
+                ->add('KM',     TextType::class, array('label'=>'Frais Kilométrique : ', 'data'=>$lesQuantites['KM']))
+                ->add('NUI',    TextType::class, array('label'=>'Nuitée Hôtel : ', 'data'=>$lesQuantites['NUI']))
+                ->add('REP',    TextType::class, array('label'=>'Repas Restaurant : ', 'data'=>$lesQuantites['REP']))
                 ->add('submit', SubmitType::class, array('label'=>'Valider'))
                 ->getForm();
         
