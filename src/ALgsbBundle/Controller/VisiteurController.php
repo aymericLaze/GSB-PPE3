@@ -12,6 +12,7 @@ use ALgsbBundle\Form\LignefraishorsforfaitType;
 use ALgsbBundle\Entity\Lignefraishorsforfait;
 
 use ALgsbBundle\Model\ModelVisiteur;
+use ALgsbBundle\Model\ModelBase;
 
 use DateTime;
 
@@ -95,8 +96,8 @@ class VisiteurController extends Controller {
         $lesDonnees['dateModif'] = $laFiche->getDatemodif();
         $lesDonnees['nbJustificatifs'] = $laFiche->getNbjustificatifs();
         $lesDonnees['montantValide'] = $laFiche->getMontantvalide();
-        $lesDonnees['quantititeFraisForfait'] = $this->getquantiteFraisForfait($laFiche);
-        $lesDonnees['lesFraisHorsForfait'] = $this->getLigneFraisHorsForfait($laFiche);
+        $lesDonnees['quantititeFraisForfait'] = ModelBase::getquantiteFraisForfait($laFiche);
+        $lesDonnees['lesFraisHorsForfait'] = ModelBase::getLignesHorsForfait($laFiche);
         
         return $this->render('@ALgsb/Visiteur/affichageFicheFrais.html.twig', array('id'=>$id, 'nom'=>$nom, 'prenom'=>$prenom, 'lesDonnees'=>$lesDonnees));
     }
@@ -122,7 +123,7 @@ class VisiteurController extends Controller {
         
         if(!ModelVisiteur::isFicheDuMois($this->array_get_last($leVisiteur->getLesFichesFrais()->toArray())))
         {
-            $this->creationNouvelleFicheFrais($leVisiteur);
+            ModelBase::creationNouvelleFicheFrais($leVisiteur, $em);
         }
         
         $laFiche = $this->array_get_last($leVisiteur->getLesFichesFrais()->toArray());
@@ -186,48 +187,6 @@ class VisiteurController extends Controller {
                 ->find($id);
     }
     
-    
-    /**
-     * Retourne la quantite de chaque frais forfait
-     * 
-     * @param Fichefrais $laFiche
-     * @return array
-     */
-    private function getQuantiteFraisForfait($laFiche)
-    {
-        $quantite = array('ETP'=>0, 'KM'=>0, 'NUI'=>0, 'REP'=>0);
-        
-        foreach($laFiche->getLigneFicheFraisForfait()->toArray() as $leFrais)
-        {
-            $quantite[$leFrais->getIdfraisforfait()->getId()] = $leFrais->getQuantite();
-        }
-        
-        return $quantite;
-    }
-    
-    /**
-     * Retourne le tableau des lignes de frais hors forfait
-     * 
-     * @param Fichefrais $laFiche
-     * @return array
-     */
-    private function getLigneFraisHorsForfait($laFiche)
-    {
-        $tableau = [];
-        
-        foreach($laFiche->getLigneFicheFraisHorsForfait()->toArray() as $laLigne)
-        {
-            array_push($tableau, array(
-                                        'date'=>$laLigne->getDate(),
-                                        'libelle'=>$laLigne->getLibelle(),
-                                        'montant'=>$laLigne->getMontant()
-                                        )
-            );
-        }
-        
-        return $tableau;
-    }
-    
     /**
      * Retourne le dernier element d'un tableau
      * 
@@ -238,42 +197,6 @@ class VisiteurController extends Controller {
     {
         $res = count($tab) - 1;
     return $tab[$res];
-    }
-    
-    /**
-     * Procedure de creation d'une nouvelle fiche de frais
-     * 
-     * @param \ALgsbBundle\Entity\Visiteur $visiteur
-     */
-    private function creationNouvelleFicheFrais(\ALgsbBundle\Entity\Visiteur $visiteur)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $etatRepo = $em->getRepository('ALgsbBundle:Etat');
-        $fraisForfaitRepo = $em->getRepository('ALgsbBundle:Fraisforfait');
-        
-        $ficheFrais = new \ALgsbBundle\Entity\Fichefrais();
-        $date = new DateTime();
-        
-        $ficheFrais
-                ->setMois($date->format('Ym'))
-                ->setNbjustificatifs(0)
-                ->setMontantvalide(0)
-                ->setDatemodif($date)
-                ->setIdetat($etatRepo->find('CR'))
-                ->setIdvisiteur($visiteur);
-        
-        foreach(array('ETP', 'KM', 'NUI', 'REP') as $idForfait)
-        {
-            $ligneFraisForfait = new \ALgsbBundle\Entity\Lignefraisforfait();
-            $ligneFraisForfait
-                    ->setQuantite(0)
-                    ->setIdfichefrais($ficheFrais)
-                    ->setIdfraisforfait($fraisForfaitRepo->find($idForfait));
-            $em->persist($ligneFraisForfait);
-        }
-        $em->persist($ficheFrais);
-        
-        $em->flush();
     }
     
     /**

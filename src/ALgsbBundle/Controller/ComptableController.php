@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use DateTime;
 
 use ALgsbBundle\Model\ModelComptable;
+use ALgsbBundle\Model\ModelBase;
 
 /**
  * Controleur des actions du comptable
@@ -127,8 +128,8 @@ class ComptableController extends Controller{
         $lesDonnees['dateModif'] = $laFiche->getDatemodif();
         $lesDonnees['nbJustificatifs'] = $laFiche->getNbjustificatifs();
         $lesDonnees['montantValide'] = $laFiche->getMontantvalide();
-        $lesDonnees['quantititeFraisForfait'] = $this->getquantiteFraisForfait($laFiche);
-        $lesDonnees['lesFraisHorsForfait'] = $this->getLigneFraisHorsForfait($laFiche);
+        $lesDonnees['quantititeFraisForfait'] = modelBase::getquantiteFraisForfait($laFiche);
+        $lesDonnees['lesFraisHorsForfait'] = ModelBase::getLignesHorsForfait($laFiche);
         
         return $this->render('@ALgsb/Comptable/ficheFrais.html.twig', array('id'=>$id, 'nom'=>$nom, 'prenom'=>$prenom, 'lesDonnees'=>$lesDonnees, 'idFiche'=>$idFiche));
     }
@@ -173,7 +174,7 @@ class ComptableController extends Controller{
         
         $laFiche = $this->getDoctrine()->getManager()->getRepository('ALgsbBundle:Fichefrais')->find($idFiche);
         
-        $lesQuantites = $this->getQuantiteFraisForfait($laFiche);
+        $lesQuantites = ModelBase::getQuantiteFraisForfait($laFiche);
         
         $form = $this->createFormBuilder()
                 ->add('ETP',    TextType::class, array('label'=>'Forfait étape : ', 'data'=>$lesQuantites['ETP']))
@@ -215,7 +216,7 @@ class ComptableController extends Controller{
         
         if($laDerniereFiche->getId() == $laFiche->getId() && $laDerniereFiche->getIdetat()->getId() == 'CL')
         {
-            $this->creationNouvelleFicheFrais($leVisiteur);
+            ModelBase::creationNouvelleFicheFrais($leVisiteur, $em);
         }
         
         $laDerniereFiche = $this->array_get_last($leVisiteur->getLesFichesFrais()->toArray());
@@ -268,48 +269,6 @@ class ComptableController extends Controller{
     }
     
     /**
-     * Retourne la quantite de chaque frais forfait
-     * 
-     * @param Fichefrais $laFiche
-     * @return array
-     */
-    private function getQuantiteFraisForfait($laFiche)
-    {
-        $quantite = array('ETP'=>0, 'KM'=>0, 'NUI'=>0, 'REP'=>0);
-        
-        foreach($laFiche->getLigneFicheFraisForfait()->toArray() as $leFrais)
-        {
-            $quantite[$leFrais->getIdfraisforfait()->getId()] = $leFrais->getQuantite();
-        }
-        
-        return $quantite;
-    }
-    
-    /**
-     * Retourne le tableau des lignes de frais hors forfait
-     * 
-     * @param Fichefrais $laFiche
-     * @return array
-     */
-    private function getLigneFraisHorsForfait($laFiche)
-    {
-        $tableau = array();
-        
-        foreach($laFiche->getLigneFicheFraisHorsForfait()->toArray() as $laLigne)
-        {
-            array_push($tableau, array(
-                                        'id'=>$laLigne->getId(),
-                                        'date'=>$laLigne->getDate(),
-                                        'libelle'=>$laLigne->getLibelle(),
-                                        'montant'=>$laLigne->getMontant()
-                                        )
-            );
-        }
-        
-        return $tableau;
-    }
-    
-    /**
      * Enregistre les frais forfait du visiteur
      * 
      * @param FormBuilder $form
@@ -339,41 +298,5 @@ class ComptableController extends Controller{
     {
         $res = count($tab) - 1;
     return $tab[$res];
-    }
-    
-    /**
-     * Creation du nouvelle fiche de frais
-     * 
-     * @param \ALgsbBundle\Entity\Visiteur $visiteur
-     */
-    private function creationNouvelleFicheFrais(\ALgsbBundle\Entity\Visiteur $visiteur)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $etatRepo = $em->getRepository('ALgsbBundle:Etat');
-        $fraisForfaitRepo = $em->getRepository('ALgsbBundle:Fraisforfait');
-        
-        $ficheFrais = new \ALgsbBundle\Entity\Fichefrais();
-        $date = new DateTime();
-        
-        $ficheFrais
-                ->setMois($date->format('Ym'))
-                ->setNbjustificatifs(0)
-                ->setMontantvalide(0)
-                ->setDatemodif($date)
-                ->setIdetat($etatRepo->find('CR'))
-                ->setIdvisiteur($visiteur);
-        
-        foreach(array('ETP', 'KM', 'NUI', 'REP') as $idForfait)
-        {
-            $ligneFraisForfait = new \ALgsbBundle\Entity\Lignefraisforfait();
-            $ligneFraisForfait
-                    ->setQuantite(0)
-                    ->setIdfichefrais($ficheFrais)
-                    ->setIdfraisforfait($fraisForfaitRepo->find($idForfait));
-            $em->persist($ligneFraisForfait);
-        }
-        $em->persist($ficheFrais);
-        
-        $em->flush();
     }
 }
