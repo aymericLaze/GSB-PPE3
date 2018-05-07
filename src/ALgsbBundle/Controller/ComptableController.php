@@ -204,6 +204,7 @@ class ComptableController extends Controller{
      */
     public function reporterFraisHorsForfaitAction(Request $request)
     {
+        
         $em = $this->getDoctrine()->getManager();
         $id = $request->attributes->get('id');
         $idFiche = $request->attributes->get('idFiche');
@@ -215,17 +216,23 @@ class ComptableController extends Controller{
         
         $lesFiches = $leVisiteur->getLesFichesFrais()->toArray();
         $laDerniereFiche = end($lesFiches);
-        if($laDerniereFiche->getId() == $laFiche->getId() && $laDerniereFiche->getIdetat()->getId() == 'CL')
+        if($laDerniereFiche->getId() == $laFiche->getId() || $laDerniereFiche->getIdetat()->getId() != 'CR')
         {
+            // creation d'une fiche de frais
             ModelBase::creationNouvelleFicheFrais($leVisiteur, $em);
+            // recuperation des fiches de frais du visiteur
+            //$leVisiteur = $laFiche->getIdVisiteur();
+            $em->refresh($leVisiteur);
+            $lesFiches = $leVisiteur->getLesFichesFrais()->toArray();
+            return $this->render('@ALgsb/test.html.twig', array('test'=>$lesFiches));
+            // recuperation de la derniere fiche de frais du visiteur
             $laDerniereFiche = end($lesFiches);
         }
-        
+        // enregistrement du frais hors forfait dans la fiche de frais a l'etat CR
         $leFraisHorsForfait->setIdfichefrais($laDerniereFiche);
-        
         $em->persist($leFraisHorsForfait);
         $em->flush();
-        
+
         return $this->redirectToRoute('afficherFiche_comptable', array('id'=>$id, 'idFiche'=>$idFiche));
     }
     
@@ -249,17 +256,5 @@ class ComptableController extends Controller{
         $em->flush();
         
         return $this->redirectToRoute('accueil_comptable', array('id'=>$id));
-    }
-    
-    /**
-     * Retourne le dernier element d'un tableau
-     * 
-     * @param array $tab
-     * @return array
-     */
-    private function array_get_last(array $tab)
-    {
-        $res = count($tab) - 1;
-    return $tab[$res];
     }
 }
