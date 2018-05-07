@@ -94,4 +94,38 @@ class ModelBase {
         
         $em->flush();
     }
+    
+    /**
+     * Enregistre les frais forfait du visiteur
+     * 
+     * @param $leFomulaire
+     * @param array $lesLignesFrais
+     * @param $em
+     */
+    public static function enregistrerFraisForfait($leFomulaire, array $lesLignesFrais, $em)
+    {
+        foreach($lesLignesFrais as $laLigne)
+        {
+            $idEtat = $laLigne->getIdfraisforfait()->getId();
+            $laLigne->setQuantite($leFomulaire->get($idEtat)->getData());
+            $em->persist($laLigne);
+        }
+        
+        $em->flush();
+    }
+    
+    /**
+     *  Retourne un objet de type $classe en fonction de l'identifiant
+     * 
+     * @param type $em
+     * @param string $id
+     * @param string $classe
+     * @return type
+     */
+    public static function getLeRepository($em, string $id, string $classe)
+    {
+        return $em
+                ->getRepository('ALgsbBundle:'.$classe)
+                ->find($id);
+    }
 }
