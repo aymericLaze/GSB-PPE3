@@ -4,6 +4,7 @@ namespace ALgsbBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 use ALgsbBundle\Form\ConnexionForm\ConnexionFormClass;
 use ALgsbBundle\Form\ConnexionForm\ConnexionFormType;
@@ -38,6 +39,11 @@ class DefaultController extends Controller
             
             if(isset($donneeUtilisateur))
             {
+                //ajout de l'identifiant en session
+                $session = $request->getSession();
+                //$session->start();
+                $session->set($profil, $donneeUtilisateur->getId());
+                //return $this->render('@ALgsb/test.html.twig', array('test'=>$session));
                 // redirection vers la route du role
                 return $this->redirectToRoute('accueil_'.$profil, array('id'=>$donneeUtilisateur->getId()));
             }
@@ -53,21 +59,26 @@ class DefaultController extends Controller
      */
     public function erreurAction(Request $request)
     {
+        // recuperation du numero d'erreur
         $idErreur = $request->attributes->get('error');
         $libelleErreur = NULL;
-                
+        // recuperation du libelle de l'erreur
         switch($idErreur)
         {
             case '1':
                 $libelleErreur = "Identifiants ou rôle incorrect";
                 break;
         }
-        
+        // retourne la vue
         return $this->render('@ALgsb/Default/erreur.html.twig', array("libelleErreur"=>$libelleErreur));
     }
     
     public function deconnexionAction(Request $request)
     {
+        // detruit la session
+        $session = $request->getSession();
+        $session->clear();
+        // redirige vers la page de connexion
         return $this->redirectToRoute('page_connexion');
     }
 }
