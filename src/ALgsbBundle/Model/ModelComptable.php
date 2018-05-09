@@ -15,7 +15,7 @@ class ModelComptable {
      * @param array $lesMois
      * @return array
      */
-    public static function getLesMoisValide(array $lesMois) : array
+    public static function getLesMoisValide(array $lesMois)
     {
         $lesMoisValide = [];
         
@@ -34,7 +34,7 @@ class ModelComptable {
      * @param array $lesVisiteurs
      * @return array
      */
-    public static function getLesVisiteursValide(array $lesVisiteurs) : array
+    public static function getLesVisiteursValide(array $lesVisiteurs)
     {
         $lesVisiteursValide = [];
         
