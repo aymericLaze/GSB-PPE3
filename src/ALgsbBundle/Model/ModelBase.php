@@ -6,6 +6,8 @@ use ALgsbBundle\Entity\Fichefrais;
 use ALgsbBundle\Entity\Visiteur;
 use ALgsbBundle\Entity\Lignefraisforfait;
 
+use Symfony\Component\HttpFoundation\Request;
+
 use DateTime;
 
 /**
@@ -127,5 +129,18 @@ class ModelBase {
         return $em
                 ->getRepository('ALgsbBundle:'.$classe)
                 ->find($id);
+    }
+    
+    /**
+     * Retourne vrai si l'utilisateur est connecte
+     * 
+     * @param Request $request
+     * @param string $id
+     * @param string $role
+     * @return bool
+     */
+    public static function estConnecte(Request $request, string $id, string $role) : bool
+    {
+        return $request->getSession()->get($role) === $id;
     }
 }
