@@ -73,6 +73,11 @@ class DefaultController extends Controller
         return $this->render('@ALgsb/Default/erreur.html.twig', array("libelleErreur"=>$libelleErreur));
     }
     
+    /**
+     * Destruction de la session et redirection vers la page de connexion
+     * 
+     * @param Request $request
+     */
     public function deconnexionAction(Request $request)
     {
         // detruit la session
