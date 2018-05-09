@@ -30,7 +30,7 @@ class DefaultController extends Controller
         if($form->isSubmitted() && $form->isValid())
         {
             $login = $form->get('login')->getData();
-            $motDePasse = $form->get('passwd')->getData();
+            $motDePasse = md5($form->get('passwd')->getData());
             $profil = $form->get('role')->getData();
             
             // interogation de la base
