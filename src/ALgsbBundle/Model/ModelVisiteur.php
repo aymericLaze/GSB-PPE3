@@ -18,7 +18,7 @@ class ModelVisiteur {
      * @param array $lesFiches
      * @return array
      */
-    public static function getLesMoisPourFormulaire(array $lesFiches) : array
+    public static function getLesMoisPourFormulaire(array $lesFiches)
     {
         $lesMois = [];
         
@@ -39,7 +39,7 @@ class ModelVisiteur {
      * @param Fichefrais $laFiche
      * @return bool
      */
-    public static function isFicheDuMois(Fichefrais $laFiche) : bool
+    public static function isFicheDuMois(Fichefrais $laFiche)
     {
         return $laFiche->getIdetat()->getId() == 'CR';
     }
