@@ -51,7 +51,7 @@ class ModelVisiteur {
      * @param Fichefrais $laFiche
      * @return Lignefraishorsforfait
      */
-    public static function enregistrerFraisHorsForfait($leFormulaire, Fichefrais $laFiche) : Lignefraishorsforfait
+    public static function enregistrerFraisHorsForfait($leFormulaire, Fichefrais $laFiche)
     {
         $frais = new Lignefraishorsforfait();
         
