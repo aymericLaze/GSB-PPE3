@@ -172,11 +172,12 @@ class VisiteurController extends Controller {
         // recuperation des donnees des formulaires
         $formFraisForfait->handleRequest($request);
         $formFraisHorsForfait->handleRequest($request);
+        
         // test si le formulaires des frais forfait est valide
         if($formFraisForfait->isSubmitted() && $formFraisForfait->isValid())
         {
             // enregistrement dans la base des quantites de frais forfait
-            ModelBase::enregistrerFraisForfait($formFraisForfait, $lesLignesFraisForfait, $em);
+            ModelBase::enregistrerFraisForfait($formFraisForfait, $laFiche->getLigneFicheFraisForfait()->toArray(), $em);
             return $this->redirectToRoute('saisir_visiteur', array('id'=>$id));
         }
         // test si le formulaire des frais hors forfait est valide
